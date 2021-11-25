@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+      integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+      integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Les petits plats</title>
+  </head>
+  <body>
+    <div id="overlay" class="overlay"></div>
+    <!-- HEADER -->
+    <header class="main-header">
+      <img
+        src="./images/logo.svg"
+        alt="Les petits plats"
+        width="512"
+        height="178"
+      />
+
+      <form action="./index.html" method="POST" class="search-form">
+        <input
+          type="text"
+          id="search-bar"
+          class="search-bar"
+          placeholder="Rechercher un ingrédient, appareil, ustensile ou une recette"
+        />
+        <button type="submit" title="Rechercher" class="search-btn">
+          <span class="fas fa-search"></span>
+        </button>
+      </form>
+
+      <div class="labels" id="labels"></div>
+
+      <form action="index.html" method="POST" class="filters" id="filters">
+        <div class="filters-elt" id="filters-elt-ingredient">
+          <input type="text" placeholder="Ingrédients" id="ingredient-input" />
+          <span class="fas fa-chevron-down" id="ingredient-btn"></span>
+          <div class="filters-all">
+            <ul id="ingredient-list"></ul>
+          </div>
+        </div>
+
+        <div class="filters-elt" id="filters-elt-appareil">
+          <input type="text" placeholder="Appareils" id="appareil-input" />
+          <span class="fas fa-chevron-down" id="appareil-btn"></span>
+          <div class="filters-all">
+            <ul id="appareil-list"></ul>
+          </div>
+        </div>
+
+        <div class="filters-elt" id="filters-elt-ustensil">
+          <input type="text" placeholder="Ustensiles" id="ustensil-input" />
+          <span class="fas fa-chevron-down" id="ustensil-btn"></span>
+          <div class="filters-all">
+            <ul id="ustensil-list"></ul>
+          </div>
+        </div>
+      </form>
+    </header>
+
+    <!-- MAIN -->
+    <main class="recipes" id="recipes"></main>
+
+    <!-- RESULT -->
+    <p id="result" class="result"></p>
+  </body>
+</html>
