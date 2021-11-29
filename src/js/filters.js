@@ -45,7 +45,6 @@ const addFilter = (type, name) => {
   return function (evt) {
     evt.preventDefault();
     const formattedName = normalizeText(name);
-
     if (type === "ing") {
       if (!state.ingLabels.includes(formattedName))
         state.ingLabels.push(formattedName);

@@ -13,10 +13,9 @@ import {
   getAllFiltersLength,
 } from "./filters";
 import {
-  //createRecipeElement,
-  //removeRecipeById,
-  displayAllRecipes, 
-  //initializeRecipes,
+  createRecipeElement,
+  removeRecipeById,
+  initializeRecipes,
 } from "./recipes";
 
 /**
@@ -35,37 +34,10 @@ const manageSearchInput = (evt) => {
  * Recherche de recette via l'input
  * @returns {void}
  */
-const searchByInput = (data) => {
-  // recup la valeur de l'input
-  const value = state.currentSearch;
-  // all id's recipes
-  state.displayedRecipes = [];
-
-  if (value.length > 2) {
-    data.recipes.forEach((recipe) => {
-      const recipeToDisplay = document.getElementById(recipe.id);
-      if (
-        normalizeText(recipe.name).includes(normalizeText(value)) ||
-        normalizeText(recipe.description).includes(normalizeText(value)) ||
-        getIngredientsStringFromRecipe(recipe).includes(normalizeText(value))
-      ) {
-        recipeToDisplay.style.display = "block";
-        state.displayedRecipes.push(recipe.id);
-      } else {
-        recipeToDisplay.style.display = "none";
-      }
-    });
-  } else {
-    data.recipes.forEach((recipe) => {
-      const recipeToDisplay = document.getElementById(recipe.id);
-      recipeToDisplay.style.display = "block";
-    });
-  }
-};
 
 // ! V2 Algo for loop
-// const searchByInput = () => {
-//   const mainContentElt = document.getElementById("main-content");
+// const searchByInput = (data) => {
+//   const mainContentElt = document.getElementById("recipes");
 //   const value = state.currentSearch;
 //   state.displayedRecipes = [];
 
@@ -76,41 +48,133 @@ const searchByInput = (data) => {
 
 //     for (let i = 0; i < data.recipes.length; i++) {
 //       if (normalizeText(data.recipes[i].name).includes(normalizeText(value))) {
-//         //(Elt) > supprime/ajoute dans le DOM/ajoute dans l'array l'id 
+//         //(Elt) > supprime/ajoute dans le DOM/ajoute dans l'array l'id
 //         removeRecipeById(data.recipes[i].id);
 //         mainContentElt.appendChild(createRecipeElement(data.recipes[i]));
 //         state.displayedRecipes.push(data.recipes[i].id);
 //       } else {
 //         recipesFromTitle.push(data.recipes[i]);
 //         removeRecipeById(data.recipes[i].id);
+//         checkSearchResults();
 //       }
 //     }
+
 //     for (let i = 0; i < recipesFromTitle.length; i++) {
-//       if (normalizeText(recipesFromTitle[i].description).includes(normalizeText(value))) {
+//       if (
+//         normalizeText(recipesFromTitle[i].description).includes(
+//           normalizeText(value)
+//         )
+//       ) {
 //         removeRecipeById(recipesFromTitle[i].id);
 //         mainContentElt.appendChild(createRecipeElement(recipesFromTitle[i]));
+//         //mainContentElt.innerHTML += createRecipeElement(recipesFromTitle[i]);
 //         state.displayedRecipes.push(recipesFromTitle[i].id);
 //       } else {
 //         recipesFromDescription.push(recipesFromTitle[i]);
 //         removeRecipeById(recipesFromTitle[i].id);
+//         checkSearchResults();
 //       }
 //     }
 
 //     for (let i = 0; i < recipesFromDescription.length; i++) {
 //       if (
-//         getIngredientsStringFromRecipe(recipesFromDescription[i]).includes(normalizeText(value))
+//         getIngredientsStringFromRecipe(recipesFromDescription[i]).includes(
+//           normalizeText(value)
+//         )
 //       ) {
 //         removeRecipeById(recipesFromDescription[i].id);
-//         mainContentElt.appendChild(createRecipeElement(recipesFromDescription[i]));
+//         mainContentElt.appendChild(
+//           createRecipeElement(recipesFromDescription[i])
+//         );
+//         //mainContentElt.innerHTML += createRecipeElement(recipesFromDescription[i]);
 //         state.displayedRecipes.push(recipesFromDescription[i].id);
 //       } else {
 //         removeRecipeById(recipesFromDescription[i].id);
+//         checkSearchResults();
 //       }
 //     }
 //   } else {
-//     mainContentElt.innerHTML = "";
+//     //mainContentElt.innerHTML = "";
+//     initializeRecipes(data);
 //   }
 // };
+
+const searchByInput = (data) => {
+  const mainContentElt = document.getElementById("recipes");
+  const value = state.currentSearch;
+  state.displayedRecipes = [];
+  console.log('z', state.displayedRecipes);
+
+  if (value.length > 2) {
+    let recipesFromTitle = [];
+    let recipesFromDescription = [];
+
+    for (let i = 0; i < data.recipes.length; i++) {
+      testSearchValue(
+        data.recipes[i],
+        recipesFromTitle,
+        data.recipes[i].name,
+        mainContentElt,
+        state.displayedRecipes,
+        value
+      );
+    }
+
+    for (let i = 0; i < recipesFromTitle.length; i++) {
+      testSearchValue(
+        recipesFromTitle[i],
+        recipesFromDescription,
+        recipesFromTitle[i].description,
+        mainContentElt,
+        state.displayedRecipes,
+        value
+      );
+    }
+
+    for (let i = 0; i < recipesFromDescription.length; i++) {
+      if (
+        getIngredientsStringFromRecipe(recipesFromDescription[i]).includes(
+          normalizeText(value)
+        )
+      ) {
+        removeRecipeById(recipesFromDescription[i].id);
+        mainContentElt.appendChild(
+          createRecipeElement(recipesFromDescription[i])
+        );
+        //mainContentElt.innerHTML += createRecipeElement(recipesFromDescription[i]);
+        state.displayedRecipes.push(recipesFromDescription[i].id);
+      } else {
+        removeRecipeById(recipesFromDescription[i].id);
+        checkSearchResults();
+      }
+    }
+  } else {
+    initializeRecipes(data);
+  }
+};
+
+const testSearchValue = (
+  recipesFromArray,
+  pushArray,
+  type,
+  elt,
+  state,
+  value
+) => {
+  if (normalizeText(type).includes(normalizeText(value))) {
+    displaySearchBy(recipesFromArray, elt);
+    state.push(recipesFromArray.id);
+  } else {
+    pushArray.push(recipesFromArray);
+    removeRecipeById(recipesFromArray.id);
+    checkSearchResults();
+  }
+};
+
+const displaySearchBy = (recipe, elt) => {
+  removeRecipeById(recipe.id);
+  elt.appendChild(createRecipeElement(recipe));
+};
 
 /**
  * Recherche de recette via les filtres
@@ -135,9 +199,8 @@ const searchByTag = (data) => {
     // getAllRecipeIds() contient un array avec toutes les id recettes
     arrayOfRecipes = getAllRecipeIds(data);
     // Affiche toutes les recettes via l'id
-    displayAllRecipes(data);
     // ! v2 algo fro loop
-    //initializeRecipes();
+    initializeRecipes(data);
   }
 
   arrayOfRecipes.forEach((idRecipe) => {
@@ -175,8 +238,8 @@ const displayRemainingTags = (data) => {
   } else {
     const allRecipes = document.querySelectorAll("#recipes article");
     const visileRecipesIds = Array.from(allRecipes)
-    .filter((elt) => elt.style.display === "block")
-    .map((elt) => parseInt(elt.id));
+      .filter((elt) => elt.style.display === "block")
+      .map((elt) => parseInt(elt.id));
     recipesToConsider = getFullRecipesFromIds(visileRecipesIds, datas);
     // getFullRecipesFromIds() affiche les datas en fonction de l'id > (6)[{…}, {…}, {…}, {…}, {…}, {…}]
   }
@@ -250,15 +313,19 @@ const displayUstensilsFromRecipe = (recipe) => {
 const checkSearchResults = () => {
   const allRecipes = document.querySelectorAll("#recipes article");
   const mainContentElt = document.getElementById("result");
+
   const hiddenRecipes = Array.from(allRecipes).filter(
     (elt) => elt.style.display === "none"
   );
 
-  if (hiddenRecipes.length === 50) {
-    mainContentElt.textContent =
-      `Aucune recette ne correspond à votre critère… vous pouvez
+  if (allRecipes.length === 0 || hiddenRecipes.length === allRecipes.length) {
+    if (state.currentSearch.length < 3 && getAllFiltersLength() === 0) {
+      mainContentElt.textContent = "";
+    } else {
+      mainContentElt.textContent = `Aucune recette ne correspond à votre critère… vous pouvez
       chercher « tarte aux pommes », « poisson », etc.
       `;
+    }
   } else {
     mainContentElt.textContent = "";
   }
