@@ -33,6 +33,7 @@ const createLinkElt = (eltHref, eltContent, eltClass = null) => {
 const normalizeText = (text) => {
   return text
     .toLowerCase()
+    //encodeage UTF8 + séparation des caractères spéciaux
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
 };

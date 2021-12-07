@@ -9,7 +9,7 @@ import { createGenericElt, normalizeText } from "./utils";
 const labelsElt = document.getElementById("labels");
 
 /**
- * * Création d'un Elt Label
+ * * Création d'un Elt Label + on lui ajoute un écouteur d'event qui va le supprimer au click
  * @param   {string}   type  ing, app or ust
  * @param   {string}   name  the label's name
  * @return  {node}
@@ -27,8 +27,8 @@ const createLabel = (type, name) => {
 };
 
 /**
- * usine pour créer la div qui va contenir un label <div> + injection de chaque label dans la balise <#labels>
- * @param   {array}   labelsList  the list of labels to create
+ * créer la div qui va contenir les label <div> + injection de chaque label dans la balise <#labels>
+ * @param   {array}   labelsList  liste des labels creés
  * @param   {string}  type  ing, app or ust
  * @return  {node}
  */
@@ -43,6 +43,7 @@ const createLabels = (labelsList, type) => {
 
 /**
  * Ajout de tous les labels dans <div class="labels" id="labels">
+ * ingLabels = ['lait de coco', ...]
  * @return  {void}
  */
 const createAllLabels = () => {
@@ -55,15 +56,15 @@ const createAllLabels = () => {
 /**
  * Supprimer un label
  * @param   {string}  type  ing, app or ust
- * @param   {string}  name  the label's name
+ * @param   {string}  name  le nom du label
  * @return  {node}
  */
 const removeFilter = (type, name) => {
-  return function (evt) {
-    evt.preventDefault();
+  return function (e) {
+    e.preventDefault();
     const formattedName = normalizeText(name);
     
-
+    //ingLabels = ['lait de coco', ...]
     if (type === "ing")
       state.ingLabels = state.ingLabels.filter((elt) => formattedName !== elt);
     if (type === "app")

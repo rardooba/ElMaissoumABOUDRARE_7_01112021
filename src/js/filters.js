@@ -37,6 +37,7 @@ const createFilterElt = (type, name) => {
 
 /**
  * callback function onClick event à ajouter ensuite sur les tags
+ * Au clique ajoute le tag au tableau ingLabels pour ensuite l'afficher comme label avec createAllLabels(line 49) > labels.js
  * @param   {string}    type  ing, app or ust
  * @param   {string}    name  the filter's name
  * @return  {void}
@@ -64,8 +65,8 @@ const addFilter = (type, name) => {
 };
 
 /**
- * Création de la liste des tags
- * @param   {array} list  list of filters to display
+ * Création et affichage de la liste des tags dans les filtres à partir des états
+ * @param   {array} list  state.displayedIng ou state.displayedApp
  * @return  {node}
  */
 const createFiltersList = (listElt, list) => {
@@ -77,7 +78,7 @@ const createFiltersList = (listElt, list) => {
 };
 
 /**
- * On renseigne les contenu des tags avec les state correspondants
+ * Remplit les filtres avec le la liste des tags
  * @returns {void}
  */
 const fillAllFilterLists = () => {
@@ -211,7 +212,8 @@ const clearAllFilters = () => {
 };
 
 /**
- * Get the number of filters added (ing + app + ust)
+ * Recup du nombre total de tags (ing + app + ust)
+ * utilisé dans >> searchByTag() displayRemainingTags() checkSearchResults()
  * @returns {number}
  */
 const getAllFiltersLength = () => {
@@ -222,7 +224,7 @@ const getAllFiltersLength = () => {
 };
 
 /**
- * Clear value in filters inputs
+ * Effacer la valeur dans l'input du filtre
  * @returns {void}
  */
 const removeFilterInputsValue = () => {
@@ -248,7 +250,7 @@ const manageCompletion = (evt) => {
 };
 
 /**
- * Display all tags in the DOM
+ * Affichage de tous les tags dans le DOM
  * @returns {void}
  */
 const resetTagsDisplay = () => {

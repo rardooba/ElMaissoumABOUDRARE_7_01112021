@@ -2,6 +2,11 @@ import state from "./state";
 
 import { normalizeText } from "./utils";
 
+// Var type: ing/app/ust
+const ingType = "ing";
+const appType = "app";
+const ustType = "ust";
+
 /**
  * Recup d'une liste de tous les ingr provenant de toutes les recettes
  * * (line 72) > state.displayedIng = getAllIngredients();
@@ -18,7 +23,7 @@ const getAllIngredients = (data) => {
   });
 
   return ingredients.map((ing) => ({
-    type: "ing",
+    type: ingType,
     name: ing,
   }));
 };
@@ -34,7 +39,7 @@ const getAllAppliances = (data) => {
       appliances.push(recipe.appliance.toLowerCase());
   });
   return appliances.map((app) => ({
-    type: "app",
+    type: appType,
     name: app,
   }));
 };
@@ -52,14 +57,14 @@ const getAllUstensils = (data) => {
     });
   });
   return ustensils.map((ust) => ({
-    type: "ust",
+    type: ustType,
     name: ust,
   }));
 };
 
 /**
  * Recup d'une liste de toutes les ids des recettes 
- * @return  {array}    the list of ids
+ * @return  {array}    the list of ids [1, 2, 3, 4, 5, ... 50]
  */
 const getAllRecipeIds = (data) => {
   return data.recipes.map((elt) => elt.id);
@@ -70,11 +75,11 @@ const getAllRecipeIds = (data) => {
  * @returns {void}
  */
 const initializeState = (data) => {
-  state.displayedIng = getAllIngredients(data);
+  state.displayedIng = getAllIngredients(data); // [{type: 'ing', name: 'lait de coco'}...]
   state.displayedApp = getAllAppliances(data);
   state.displayedUst = getAllUstensils(data);
-  state.displayedRecipes = getAllRecipeIds(data);
-  state.ingObj = getIngredientsObject(data);
+  state.displayedRecipes = getAllRecipeIds(data); // list of ids [1, 2, 3, 4, 5, ... 50]
+  state.ingObj = getIngredientsObject(data); // {ail: [26, 29, 30]...  searchByTag() > search.js
   state.appObj = getAppliancesObject(data);
   state.ustObj = getUstensilsObject(data);
 };
@@ -104,11 +109,12 @@ const createTagObject = (tagList) => {
   tagList.forEach((tag) => (tagObj[normalizeText(tag.name)] = []));
 
   return tagObj;
-  // log = ail: (3) [26, 29, 30]
+  // log = {ail: []}
 };
 
 /**
- * Recup un obj avec tous les nom d'ingr + les différents id de leur recette => ail: (3) [26, 29, 30]
+ * * Recup un obj avec tous les nom d'ingr + les différents id de leur recette => {ail: [26, 29, 30]...
+ * utiliser pour initialiser state.ingObj
  * @return  {object}
  */
 const getIngredientsObject = (data) => {
@@ -125,7 +131,7 @@ const getIngredientsObject = (data) => {
 };
 
 /**
- * Get an object with all appliance names
+ * 
  * @return  {object}
  */
 const getAppliancesObject = (data) => {
@@ -140,7 +146,7 @@ const getAppliancesObject = (data) => {
 };
 
 /**
- * Get an object with all ustensil names
+ * 
  * @return  {object}
  */
 const getUstensilsObject = (data) => {
@@ -159,6 +165,9 @@ const getUstensilsObject = (data) => {
 
 /**
  * Recup all data de la recette via l'id
+ * utilisé dans displayRemainingTags() > search.js
+ * log = [ 0:{…}, 1:{…}, 2:{…}, 3:{…}, ..]
+ * idsArray = [1, 3, 2, 26, 30, 35]
  * @return  {array}
  */
 const getFullRecipesFromIds = (idsArray, data) => {

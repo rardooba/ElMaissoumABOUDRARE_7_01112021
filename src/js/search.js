@@ -36,99 +36,43 @@ const manageSearchInput = (evt) => {
  */
 
 // ! V2 Algo for loop
-// const searchByInput = (data) => {
-//   const mainContentElt = document.getElementById("recipes");
-//   const value = state.currentSearch;
-//   state.displayedRecipes = [];
-
-//   if (value.length > 2) {
-//     //inclus toutes les recettes dont les titres ne match pas avec la valeur de l'input
-//     let recipesFromTitle = [];
-//     let recipesFromDescription = [];
-
-//     for (let i = 0; i < data.recipes.length; i++) {
-//       if (normalizeText(data.recipes[i].name).includes(normalizeText(value))) {
-//         //(Elt) > supprime/ajoute dans le DOM/ajoute dans l'array l'id
-//         removeRecipeById(data.recipes[i].id);
-//         mainContentElt.appendChild(createRecipeElement(data.recipes[i]));
-//         state.displayedRecipes.push(data.recipes[i].id);
-//       } else {
-//         recipesFromTitle.push(data.recipes[i]);
-//         removeRecipeById(data.recipes[i].id);
-//         checkSearchResults();
-//       }
-//     }
-
-//     for (let i = 0; i < recipesFromTitle.length; i++) {
-//       if (
-//         normalizeText(recipesFromTitle[i].description).includes(
-//           normalizeText(value)
-//         )
-//       ) {
-//         removeRecipeById(recipesFromTitle[i].id);
-//         mainContentElt.appendChild(createRecipeElement(recipesFromTitle[i]));
-//         //mainContentElt.innerHTML += createRecipeElement(recipesFromTitle[i]);
-//         state.displayedRecipes.push(recipesFromTitle[i].id);
-//       } else {
-//         recipesFromDescription.push(recipesFromTitle[i]);
-//         removeRecipeById(recipesFromTitle[i].id);
-//         checkSearchResults();
-//       }
-//     }
-
-//     for (let i = 0; i < recipesFromDescription.length; i++) {
-//       if (
-//         getIngredientsStringFromRecipe(recipesFromDescription[i]).includes(
-//           normalizeText(value)
-//         )
-//       ) {
-//         removeRecipeById(recipesFromDescription[i].id);
-//         mainContentElt.appendChild(
-//           createRecipeElement(recipesFromDescription[i])
-//         );
-//         //mainContentElt.innerHTML += createRecipeElement(recipesFromDescription[i]);
-//         state.displayedRecipes.push(recipesFromDescription[i].id);
-//       } else {
-//         removeRecipeById(recipesFromDescription[i].id);
-//         checkSearchResults();
-//       }
-//     }
-//   } else {
-//     //mainContentElt.innerHTML = "";
-//     initializeRecipes(data);
-//   }
-// };
-
 const searchByInput = (data) => {
   const mainContentElt = document.getElementById("recipes");
   const value = state.currentSearch;
   state.displayedRecipes = [];
-  console.log('z', state.displayedRecipes);
 
   if (value.length > 2) {
+    //inclus toutes les recettes dont les titres ne match pas avec la valeur de l'input
     let recipesFromTitle = [];
     let recipesFromDescription = [];
 
     for (let i = 0; i < data.recipes.length; i++) {
-      testSearchValue(
-        data.recipes[i],
-        recipesFromTitle,
-        data.recipes[i].name,
-        mainContentElt,
-        state.displayedRecipes,
-        value
-      );
+      if (normalizeText(data.recipes[i].name).includes(normalizeText(value))) {
+        //(Elt) > supprime/ajoute dans le DOM/ajoute dans l'array l'id
+        removeRecipeById(data.recipes[i].id);
+        mainContentElt.appendChild(createRecipeElement(data.recipes[i]));
+        state.displayedRecipes.push(data.recipes[i].id);
+      } else {
+        recipesFromTitle.push(data.recipes[i]);
+        removeRecipeById(data.recipes[i].id);
+        checkSearchResults();
+      }
     }
 
     for (let i = 0; i < recipesFromTitle.length; i++) {
-      testSearchValue(
-        recipesFromTitle[i],
-        recipesFromDescription,
-        recipesFromTitle[i].description,
-        mainContentElt,
-        state.displayedRecipes,
-        value
-      );
+      if (
+        normalizeText(recipesFromTitle[i].description).includes(
+          normalizeText(value)
+        )
+      ) {
+        removeRecipeById(recipesFromTitle[i].id);
+        mainContentElt.appendChild(createRecipeElement(recipesFromTitle[i]));
+        state.displayedRecipes.push(recipesFromTitle[i].id);
+      } else {
+        recipesFromDescription.push(recipesFromTitle[i]);
+        removeRecipeById(recipesFromTitle[i].id);
+        checkSearchResults();
+      }
     }
 
     for (let i = 0; i < recipesFromDescription.length; i++) {
@@ -149,38 +93,93 @@ const searchByInput = (data) => {
       }
     }
   } else {
+    //mainContentElt.innerHTML = "";
     initializeRecipes(data);
   }
 };
 
-const testSearchValue = (
-  recipesFromArray,
-  pushArray,
-  type,
-  elt,
-  state,
-  value
-) => {
-  if (normalizeText(type).includes(normalizeText(value))) {
-    displaySearchBy(recipesFromArray, elt);
-    state.push(recipesFromArray.id);
-  } else {
-    pushArray.push(recipesFromArray);
-    removeRecipeById(recipesFromArray.id);
-    checkSearchResults();
-  }
-};
+// const searchByInput = (data) => {
+//   const mainContentElt = document.getElementById("recipes");
+//   const value = state.currentSearch;
+//   state.displayedRecipes = [];
 
-const displaySearchBy = (recipe, elt) => {
-  removeRecipeById(recipe.id);
-  elt.appendChild(createRecipeElement(recipe));
-};
+//   if (value.length > 2) {
+//     let recipesFromTitle = [];
+//     let recipesFromDescription = [];
+
+//     for (let i = 0; i < data.recipes.length; i++) {
+//       testSearchValue(
+//         data.recipes[i],
+//         recipesFromTitle,
+//         data.recipes[i].name,
+//         mainContentElt,
+//         state.displayedRecipes,
+//         value
+//       );
+//     }
+
+//     for (let i = 0; i < recipesFromTitle.length; i++) {
+//       testSearchValue(
+//         recipesFromTitle[i],
+//         recipesFromDescription,
+//         recipesFromTitle[i].description,
+//         mainContentElt,
+//         state.displayedRecipes,
+//         value
+//       );
+//     }
+
+//     for (let i = 0; i < recipesFromDescription.length; i++) {
+//       if (
+//         getIngredientsStringFromRecipe(recipesFromDescription[i]).includes(
+//           normalizeText(value)
+//         )
+//       ) {
+//         removeRecipeById(recipesFromDescription[i].id);
+//         mainContentElt.appendChild(
+//           createRecipeElement(recipesFromDescription[i])
+//         );
+//         //mainContentElt.innerHTML += createRecipeElement(recipesFromDescription[i]);
+//         state.displayedRecipes.push(recipesFromDescription[i].id);
+//       } else {
+//         removeRecipeById(recipesFromDescription[i].id);
+//         checkSearchResults();
+//       }
+//     }
+//   } else {
+//     initializeRecipes(data);
+//   }
+// };
+
+// const testSearchValue = (
+//   recipesFromArray,
+//   pushArray,
+//   type,
+//   elt,
+//   state,
+//   value
+// ) => {
+//   if (normalizeText(type).includes(normalizeText(value))) {
+//     displaySearchBy(recipesFromArray, elt);
+//     state.push(recipesFromArray.id);
+//   } else {
+//     pushArray.push(recipesFromArray);
+//     removeRecipeById(recipesFromArray.id);
+//     checkSearchResults();
+//   }
+// };
+
+// const displaySearchBy = (recipe, elt) => {
+//   removeRecipeById(recipe.id);
+//   elt.appendChild(createRecipeElement(recipe));
+// };
 
 /**
  * Recherche de recette via les filtres
  * @returns {void}
  */
 const searchByTag = (data) => {
+  //initialisation des états (cf initializeState() line 77 > datalogic.js)
   const {
     ingLabels,
     appLabels,
@@ -193,26 +192,31 @@ const searchByTag = (data) => {
   } = state;
 
   let arrayOfRecipes = displayedRecipes;
-  //log = []
-
+  //log = [ici se trouveront les ids des recettes]
+  
   if (currentSearch.length < 3 && getAllFiltersLength() > 0) {
     // getAllRecipeIds() contient un array avec toutes les id recettes
     arrayOfRecipes = getAllRecipeIds(data);
+
     // Affiche toutes les recettes via l'id
-    // ! v2 algo fro loop
+    // ! v2 algo for loop
     initializeRecipes(data);
   }
-
+  
   arrayOfRecipes.forEach((idRecipe) => {
-    // recup le bloc recette <article></article>
-    const displayedRecipe = document.getElementById(idRecipe);
 
-    // filtrage par correspondance d'ing
+    // recup le bloc recette via l'id <article>...</article>
+    const displayedRecipe = document.getElementById(idRecipe);
+    
+    // filtrage par correspondance d'ing entre ingObj[ing] > ail: [26, 29, 30] et l'id de la recette
+    // ingLabels = ['lait de coco'...] + concat les autres ing au clique
     ingLabels.forEach((ing) => {
       if (!ingObj[ing].includes(idRecipe))
-        displayedRecipe.style.display = "none";
+      displayedRecipe.style.display = "none";
     });
 
+    // arrayOfRecipes = [1,2,3,4,5,6,7,8... 50]
+    
     appLabels.forEach((app) => {
       if (!appObj[app].includes(idRecipe))
         displayedRecipe.style.display = "none";
@@ -240,12 +244,16 @@ const displayRemainingTags = (data) => {
     const visileRecipesIds = Array.from(allRecipes)
       .filter((elt) => elt.style.display === "block")
       .map((elt) => parseInt(elt.id));
+      console.log(visileRecipesIds);
+    //visileRecipesIds = [id des recettes correspondant au tag]
     recipesToConsider = getFullRecipesFromIds(visileRecipesIds, datas);
+    // recipesToConsider renvois un tableau avec les recettes correspondants à l'id (visileRecipesIds)
     // getFullRecipesFromIds() affiche les datas en fonction de l'id > (6)[{…}, {…}, {…}, {…}, {…}, {…}]
   }
 
   clearAllFilters();
   recipesToConsider.forEach((recipe) => displayFiltersFromRecipes(recipe));
+  //displayFiltersFromRecipes() affiche les tags correspondants aux recettes contenues dans recipesToConsider
 };
 
 /**
@@ -260,12 +268,13 @@ const displayFiltersFromRecipes = (recipe) => {
 };
 
 /**
- * Afficher les filtres d'ingrédients inclus dans les recettes affichées
- * @param   {object} recipe the added recipe
+ * Affiche les filtres d'ingrédients en fonction des recettes affichées de manière dynamique
+ * @param   {object} recipe recette ajoutée
  * @returns {void}
  */
 const displayIngredientsFromRecipe = (recipe) => {
   const ingListElt = document.getElementById("ingredient-list");
+  // getVisibleFilters() : contient une liste des filtre(tags) par recette affichées
   const visibleIngFilters = getVisibleFilters("ingredient");
 
   recipe.ingredients.forEach((ing) => {
@@ -307,7 +316,7 @@ const displayUstensilsFromRecipe = (recipe) => {
 };
 
 /**
- * Message en cas de resultat null
+ * Message en cas de resultat = null
  * @returns {void}
  */
 const checkSearchResults = () => {
