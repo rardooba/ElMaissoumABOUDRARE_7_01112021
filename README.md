@@ -1,6 +1,6 @@
 # OPENCLASSROOMS PROJECT 7
 
-Build a searching algorithm in JavaScript
+Create a searching algorithm in JavaScript
 
 ## For Developers
 
@@ -13,4 +13,12 @@ Build a searching algorithm in JavaScript
 ### Environment
 
 - Webpack
-- TODO add commande à executer
+
+### Get Started 
+
+- Clone the repository
+- cd ElMaissoumABOUDRARE_7_01112021
+- yarn to install the node modules
+- yarn build to create a production build
+
+
